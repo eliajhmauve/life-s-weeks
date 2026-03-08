@@ -1,12 +1,14 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import html2canvas from "html2canvas";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { getRandomQuote } from "@/data/quotes";
 import LifeGridView from "./LifeGridView";
 import ProgressView from "./ProgressView";
 import MilestoneView from "./MilestoneView";
-import { Grid3X3, BarChart3, Flag, RotateCcw } from "lucide-react";
+import ShareCard from "./ShareCard";
+import { Grid3X3, BarChart3, Flag, RotateCcw, Image } from "lucide-react";
 
 type ViewType = "grid" | "progress" | "milestone";
 
@@ -19,6 +21,7 @@ const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
   const [view, setView] = useState<ViewType>("grid");
   const [lifeExpectancy, setLifeExpectancy] = useState(80);
   const quote = useMemo(() => getRandomQuote(), []);
+  const shareCardRef = useRef<HTMLDivElement>(null);
 
   const views: { key: ViewType; label: string; icon: React.ReactNode }[] = [
     { key: "grid", label: "週格子", icon: <Grid3X3 className="w-4 h-4" /> },
@@ -33,6 +36,35 @@ const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
   }, [birthday, lifeExpectancy]);
 
   const shareText = `我的人生已經過了 ${lifePercent.toFixed(1)}%，你呢？\n\n#人生倒數計時器`;
+
+  const handleShareImage = useCallback(async () => {
+    if (!shareCardRef.current) return;
+    try {
+      const canvas = await html2canvas(shareCardRef.current, {
+        scale: 2,
+        backgroundColor: null,
+        logging: false,
+      });
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, "image/png")
+      );
+      if (!blob) return;
+
+      if (navigator.share && navigator.canShare?.({ files: [new File([blob], "life-timer.png", { type: "image/png" })] })) {
+        const file = new File([blob], "life-timer.png", { type: "image/png" });
+        await navigator.share({ text: shareText, files: [file] });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "life-timer.png";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch (e) {
+      console.error("Share image failed:", e);
+    }
+  }, [shareText]);
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -52,9 +84,15 @@ const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
             <RotateCcw className="w-4 h-4" />
           </button>
           <h1 className="text-sm font-medium font-serif">人生倒數計時器</h1>
-          <Button variant="ghost" size="sm" onClick={handleShare} className="text-xs">
-            分享
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="sm" onClick={handleShareImage} className="text-xs gap-1">
+              <Image className="w-3.5 h-3.5" />
+              圖片
+            </Button>
+            <Button variant="ghost" size="sm" onClick={handleShare} className="text-xs">
+              分享
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -130,6 +168,15 @@ const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
         </blockquote>
         <p className="mt-3 text-xs font-medium text-primary">最好的時間是現在</p>
       </footer>
+
+      {/* Hidden share card for image generation */}
+      <ShareCard
+        ref={shareCardRef}
+        lifePercent={lifePercent}
+        lifeExpectancy={lifeExpectancy}
+        quoteText={quote.text}
+        quoteAuthor={quote.author}
+      />
     </div>
   );
 };
