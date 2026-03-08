@@ -21,6 +21,7 @@ const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
   const [view, setView] = useState<ViewType>("grid");
   const [lifeExpectancy, setLifeExpectancy] = useState(80);
   const quote = useMemo(() => getRandomQuote(), []);
+  const shareCardRef = useRef<HTMLDivElement>(null);
 
   const views: { key: ViewType; label: string; icon: React.ReactNode }[] = [
     { key: "grid", label: "週格子", icon: <Grid3X3 className="w-4 h-4" /> },
