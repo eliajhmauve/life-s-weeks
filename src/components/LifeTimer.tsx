@@ -84,9 +84,15 @@ const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
             <RotateCcw className="w-4 h-4" />
           </button>
           <h1 className="text-sm font-medium font-serif">人生倒數計時器</h1>
-          <Button variant="ghost" size="sm" onClick={handleShare} className="text-xs">
-            分享
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="sm" onClick={handleShareImage} className="text-xs gap-1">
+              <Image className="w-3.5 h-3.5" />
+              圖片
+            </Button>
+            <Button variant="ghost" size="sm" onClick={handleShare} className="text-xs">
+              分享
+            </Button>
+          </div>
         </div>
       </header>
 
