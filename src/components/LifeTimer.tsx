@@ -168,6 +168,15 @@ const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
         </blockquote>
         <p className="mt-3 text-xs font-medium text-primary">最好的時間是現在</p>
       </footer>
+
+      {/* Hidden share card for image generation */}
+      <ShareCard
+        ref={shareCardRef}
+        lifePercent={lifePercent}
+        lifeExpectancy={lifeExpectancy}
+        quoteText={quote.text}
+        quoteAuthor={quote.author}
+      />
     </div>
   );
 };
