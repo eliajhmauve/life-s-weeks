@@ -8,7 +8,8 @@ import LifeGridView from "./LifeGridView";
 import ProgressView from "./ProgressView";
 import MilestoneView from "./MilestoneView";
 import ShareCard from "./ShareCard";
-import { Grid3X3, BarChart3, Flag, RotateCcw, Image } from "lucide-react";
+import { Grid3X3, BarChart3, Flag, RotateCcw, Image, Sun, Moon } from "lucide-react";
+import { useTheme } from "@/hooks/use-theme";
 
 type ViewType = "grid" | "progress" | "milestone";
 
