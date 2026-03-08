@@ -37,6 +37,35 @@ const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
 
   const shareText = `我的人生已經過了 ${lifePercent.toFixed(1)}%，你呢？\n\n#人生倒數計時器`;
 
+  const handleShareImage = useCallback(async () => {
+    if (!shareCardRef.current) return;
+    try {
+      const canvas = await html2canvas(shareCardRef.current, {
+        scale: 2,
+        backgroundColor: null,
+        logging: false,
+      });
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, "image/png")
+      );
+      if (!blob) return;
+
+      if (navigator.share && navigator.canShare?.({ files: [new File([blob], "life-timer.png", { type: "image/png" })] })) {
+        const file = new File([blob], "life-timer.png", { type: "image/png" });
+        await navigator.share({ text: shareText, files: [file] });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "life-timer.png";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch (e) {
+      console.error("Share image failed:", e);
+    }
+  }, [shareText]);
+
   const handleShare = async () => {
     if (navigator.share) {
       await navigator.share({ text: shareText });
