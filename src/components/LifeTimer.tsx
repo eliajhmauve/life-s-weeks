@@ -8,7 +8,8 @@ import LifeGridView from "./LifeGridView";
 import ProgressView from "./ProgressView";
 import MilestoneView from "./MilestoneView";
 import ShareCard from "./ShareCard";
-import { Grid3X3, BarChart3, Flag, RotateCcw, Image } from "lucide-react";
+import { Grid3X3, BarChart3, Flag, RotateCcw, Image, Sun, Moon } from "lucide-react";
+import { useTheme } from "@/hooks/use-theme";
 
 type ViewType = "grid" | "progress" | "milestone";
 
@@ -19,6 +20,7 @@ interface LifeTimerProps {
 
 const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
   const [view, setView] = useState<ViewType>("grid");
+  const { theme, toggleTheme } = useTheme();
   const [lifeExpectancy, setLifeExpectancy] = useState(80);
   const quote = useMemo(() => getRandomQuote(), []);
   const shareCardRef = useRef<HTMLDivElement>(null);
@@ -85,6 +87,9 @@ const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
           </button>
           <h1 className="text-sm font-medium font-serif">人生倒數計時器</h1>
           <div className="flex items-center gap-1">
+            <button onClick={toggleTheme} className="text-muted-foreground hover:text-foreground transition-colors p-1.5 rounded-md">
+              {theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+            </button>
             <Button variant="ghost" size="sm" onClick={handleShareImage} className="text-xs gap-1">
               <Image className="w-3.5 h-3.5" />
               圖片
