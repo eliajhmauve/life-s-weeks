@@ -1,12 +1,14 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import html2canvas from "html2canvas";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { getRandomQuote } from "@/data/quotes";
 import LifeGridView from "./LifeGridView";
 import ProgressView from "./ProgressView";
 import MilestoneView from "./MilestoneView";
-import { Grid3X3, BarChart3, Flag, RotateCcw } from "lucide-react";
+import ShareCard from "./ShareCard";
+import { Grid3X3, BarChart3, Flag, RotateCcw, Image } from "lucide-react";
 
 type ViewType = "grid" | "progress" | "milestone";
 
