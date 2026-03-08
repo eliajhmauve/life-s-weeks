@@ -20,6 +20,7 @@ interface LifeTimerProps {
 
 const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
   const [view, setView] = useState<ViewType>("grid");
+  const { theme, toggleTheme } = useTheme();
   const [lifeExpectancy, setLifeExpectancy] = useState(80);
   const quote = useMemo(() => getRandomQuote(), []);
   const shareCardRef = useRef<HTMLDivElement>(null);
