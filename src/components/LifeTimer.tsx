@@ -87,6 +87,12 @@ const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
           </button>
           <h1 className="text-sm font-medium font-serif">人生倒數計時器</h1>
           <div className="flex items-center gap-1">
+            <button onClick={toggleTheme} className="text-muted-foreground hover:text-foreground transition-colors p-1.5 rounded-md">
+              {theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+            </button>
+          </button>
+          <h1 className="text-sm font-medium font-serif">人生倒數計時器</h1>
+          <div className="flex items-center gap-1">
             <Button variant="ghost" size="sm" onClick={handleShareImage} className="text-xs gap-1">
               <Image className="w-3.5 h-3.5" />
               圖片
