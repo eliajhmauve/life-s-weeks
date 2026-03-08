@@ -29,24 +29,43 @@ const LifeGridView = ({ birthday, lifeExpectancy }: LifeGridViewProps) => {
 
       <div className="flex justify-center">
         <div className="overflow-x-auto max-w-full px-2">
-          <div className="inline-grid gap-[2px]" style={{ gridTemplateColumns: `repeat(52, 1fr)` }}>
-            {Array.from({ length: totalWeeks }, (_, i) => {
-              const isPast = i < pastWeeks;
-              const isCurrent = i === pastWeeks;
-              return (
-                <div
-                  key={i}
-                  className={`life-grid-cell ${
-                    isCurrent
-                      ? "life-grid-cell-current"
-                      : isPast
-                      ? "life-grid-cell-past"
-                      : "life-grid-cell-future"
+          <div className="flex flex-col gap-[2px]">
+            {Array.from({ length: years }, (_, yearIndex) => (
+              <div key={yearIndex} className="flex items-center gap-[2px]">
+                {/* Age label every 5 years or first/last */}
+                <span
+                  className={`text-[9px] w-6 text-right shrink-0 select-none ${
+                    yearIndex % 10 === 0 || yearIndex === years - 1
+                      ? "text-muted-foreground font-medium"
+                      : yearIndex % 5 === 0
+                      ? "text-muted-foreground/60"
+                      : "text-transparent"
                   }`}
-                  title={`第 ${Math.floor(i / 52) + 1} 年，第 ${(i % 52) + 1} 週`}
-                />
-              );
-            })}
+                >
+                  {yearIndex % 5 === 0 || yearIndex === years - 1 ? yearIndex : ""}
+                </span>
+                <div className="flex gap-[2px]">
+                  {Array.from({ length: 52 }, (_, weekIndex) => {
+                    const i = yearIndex * 52 + weekIndex;
+                    const isPast = i < pastWeeks;
+                    const isCurrent = i === pastWeeks;
+                    return (
+                      <div
+                        key={weekIndex}
+                        className={`life-grid-cell ${
+                          isCurrent
+                            ? "life-grid-cell-current"
+                            : isPast
+                            ? "life-grid-cell-past"
+                            : "life-grid-cell-future"
+                        }`}
+                        title={`${yearIndex} 歲，第 ${weekIndex + 1} 週`}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
