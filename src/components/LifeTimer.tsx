@@ -85,15 +85,25 @@ const LifeTimer = ({ birthday, onReset }: LifeTimerProps) => {
 
       {/* Content */}
       <main className="flex-1 px-4 pb-8 max-w-4xl mx-auto w-full">
-        {view === "grid" && (
-          <LifeGridView birthday={birthday} lifeExpectancy={lifeExpectancy} />
-        )}
-        {view === "progress" && (
-          <ProgressView birthday={birthday} lifeExpectancy={lifeExpectancy} />
-        )}
-        {view === "milestone" && (
-          <MilestoneView birthday={birthday} lifeExpectancy={lifeExpectancy} />
-        )}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={view}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+          >
+            {view === "grid" && (
+              <LifeGridView birthday={birthday} lifeExpectancy={lifeExpectancy} />
+            )}
+            {view === "progress" && (
+              <ProgressView birthday={birthday} lifeExpectancy={lifeExpectancy} />
+            )}
+            {view === "milestone" && (
+              <MilestoneView birthday={birthday} lifeExpectancy={lifeExpectancy} />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Life Expectancy Slider */}
