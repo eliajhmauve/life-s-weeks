@@ -12,8 +12,18 @@ export default {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      sans: ['var(--font-sans)', 'sans-serif'],
+      serif: ['var(--font-serif)', 'serif'],
+    },
     extend: {
       colors: {
+        life: {
+          past: "hsl(var(--life-past))",
+          current: "hsl(var(--life-current))",
+          future: "hsl(var(--life-future))",
+          progress: "hsl(var(--life-progress))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
